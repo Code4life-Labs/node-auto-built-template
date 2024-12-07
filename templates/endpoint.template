@@ -1,0 +1,8 @@
+// Import classes
+import { Endpoints } from "src/classes/Endpoints";
+
+const testEndpoints = new Endpoints("ENDPOINT_NAME");
+
+// Add handler
+
+export default testEndpoints;

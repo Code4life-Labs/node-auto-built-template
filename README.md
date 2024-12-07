@@ -1,2 +1,7 @@
-# node-auto-built-template
-A auto-built endpoints NodeTS template project
+# NodeTS auto-built template
+
+Develop faster, easier with this template
+
+## How to use?
+
+Update later
