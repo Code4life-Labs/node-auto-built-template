@@ -19,8 +19,8 @@ node setup/create-endpoint.js -r person -e [get]:id -e [post]:id
 
 The result is
 
-**INSERT IMAGE HERE**
+<p align="center"><img src="https://github.com/user-attachments/assets/f9de09c8-9894-4c13-9e07-c605eb81e7c8" /></p>
 
 Then, you can run `npm run dev` to see the result
 
-**INSERT IMAGE HERE**
+<p align="center"><img src="https://github.com/user-attachments/assets/5381552a-bba9-4d0a-93fb-1b1ec4600fd6" /></p>
