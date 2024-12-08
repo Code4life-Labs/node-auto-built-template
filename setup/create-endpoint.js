@@ -87,6 +87,8 @@ parsedArgs.forEach((parsedArg, index) => {
   }
 });
 
+if (parsedArgs.length === 0) process.exit(0);
+
 if (rootEndpointIndex === -1) throw new Error("Root endpoint is required");
 
 // Replace enppoints
