@@ -1,12 +1,18 @@
+// Use to create Restful or HTTP Endpoint
+// Note: This script is suitable for first initialization.
+
 const fs = require("fs");
 const path = require("path");
 
 // Import utils
 const { getSrcPath, parseArgs } = require("./utils");
 
+// Import config
+const AppConfig = require("../src/app.config.json");
+
 const srcPath = getSrcPath();
-const templatePath = path.resolve(srcPath, "..", "templates");
-const targetPath = path.resolve(srcPath, "endpoints");
+const templatePath = path.resolve(srcPath, "..", AppConfig.folders.templates);
+const targetPath = path.resolve(srcPath, AppConfig.folders.endpoints);
 
 const endpointTemplateName = "endpoint.template";
 
@@ -46,6 +52,8 @@ const supportedArgs = [
 ];
 
 const parsedArgs = parseArgs(args, supportedArgs);
+
+console.log("Generating your requested endpoints...");
 
 let isEndpointProcessed = false;
 let rootEndpointIndex = -1;
@@ -117,3 +125,5 @@ fs.mkdirSync(rootEndpointDirPath);
 
 // Write to file
 fs.writeFileSync(rootEndpointFilePath, rootEndpointTemplate);
+
+console.log("Done!");

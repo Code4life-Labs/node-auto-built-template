@@ -3,7 +3,9 @@
   "hostname": "localhost",
   "unListedEndpointsDir": ["index.ts"],
   "folders": {
-    "endpoints": "endpoints"
+    "templates": "templates",
+    "endpoints": "endpoints",
+    "databases": "databases"
   },
   "origins": ["*"]
 }

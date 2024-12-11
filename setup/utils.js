@@ -12,6 +12,14 @@ const argFormats = {
   },
 };
 
+const orms = {
+  mysql: "sequelize",
+  postgresql: "sequelize",
+  sqlite: "sequelize",
+  mssql: "sequelize",
+  mongodb: "mongoose",
+};
+
 module.exports = {
   getSrcPath() {
     let cwd = process.cwd();
@@ -118,6 +126,22 @@ module.exports = {
         "Information of endpoint is required, see more in the table below"
       );
     }
+
+    return result;
+  },
+
+  /**
+   * Get supported ORM by name of database
+   * @param {string} databaseName
+   * @returns
+   */
+  getSupportedORM(databaseName) {
+    const result = orms[databaseName];
+
+    if (!result)
+      throw new Error(
+        `The database ${databaseName} is not supported and doesn't have any supported ORM`
+      );
 
     return result;
   },

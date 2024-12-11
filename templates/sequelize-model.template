@@ -1,0 +1,24 @@
+import { Model } from "sequelize";
+
+// Import types
+import type { Sequelize, DataTypes } from "sequelize";
+
+const associations = [[SEQUELIZE_ASSOCIATIONS]];
+
+export default function (sequelize: Sequelize, dataTypes: typeof DataTypes) {
+  class [MODEL_NAME] extends Model {
+    // Define static functions
+    static associate(models: any) {
+      for (const association of associations) {
+        
+      }
+    }
+  }
+
+  [MODEL_NAME].init(
+    [PROPERTIES]
+    { sequelize, modelName: "[MODEL_NAME]" }
+  );
+
+  return [MODEL_NAME];
+}

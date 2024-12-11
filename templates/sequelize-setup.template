@@ -1,5 +1,6 @@
+// Use Sequelize
 import path from "path";
-import type { Router } from "express";
+import { Sequelize, DataTypes, Model } from "sequelize";
 
 // Import classes
 import { DirReader } from "src/classes/DirReader";
@@ -8,20 +9,20 @@ import { DirReader } from "src/classes/DirReader";
 import AppConfig from "src/app.config.json";
 
 // Get path of endpoints folder
-const rootFolder = AppConfig.folders.endpoints;
-const rootPath = path.resolve(`./src/${rootFolder}`);
+const rootFolder = AppConfig.folders.databases;
+const rootPath = path.resolve(`./src/${rootFolder}/[DATABASE_NAME]`);
 
 const reader = new DirReader(AppConfig.unListedEndpointsDir);
 
 export default async function (appRouter: Router) {
+  const sequelize = new Sequelize(AppConfig.databases[[INDEX]].name, AppConfig.databases[[INDEX]].username, AppConfig.databases[[INDEX]].password, {
+    host: AppConfig.databases[[INDEX]].host,
+    dialect: AppConfig.databases[[INDEX]].engine,
+  });
   const endpointsFilePaths = await reader.getAllPathsToFiles(rootPath);
 
   for (const endpointsFilePath of endpointsFilePaths) {
     const endpointsDefault = require(endpointsFilePath);
-
-    if (!endpointsDefault.default)
-      throw new Error("Endpoint should be exported as default.");
-
     const endpoints = endpointsDefault.default;
 
     // Build

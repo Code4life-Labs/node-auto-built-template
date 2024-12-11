@@ -1,0 +1,45 @@
+{
+  "databases": [
+    {
+      "name": "identify",
+      "engine": "mysql",
+      "host": "localhost",
+      "username": "place your database username here",
+      "password": "place your database password here",
+      "objects": [
+        {
+          "name": "user",
+          "belongsTo": []
+        },
+        {
+          "name": "role",
+          "hasMany": []
+        }
+      ]
+    },
+    {
+      "name": "task",
+      "engine": "mongodb",
+      "host": "localhost",
+      "username": "place your database username here",
+      "password": "place your database password here",
+      "objects": [
+        {
+          "name": "task"
+        },
+        {
+          "name": "assignment"
+        },
+        {
+          "name": "taskStatus"
+        },
+        {
+          "name": "taskSize"
+        },
+        {
+          "name": "taskPriority"
+        }
+      ]
+    }
+  ]
+}
