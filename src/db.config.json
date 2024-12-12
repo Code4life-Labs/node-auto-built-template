@@ -6,16 +6,28 @@
       "host": "localhost",
       "username": "place your database username here",
       "password": "place your database password here",
-      "objects": [
-        {
-          "name": "user",
-          "belongsTo": []
+      "objects": {
+        "User": {
+          "tableName": "user",
+          "associations": [
+            {
+              "name": "Role",
+              "type": "belong",
+              "foreignKey": "roleId"
+            }
+          ]
         },
-        {
-          "name": "role",
-          "hasMany": []
+        "Role": {
+          "tableName": "role",
+          "associations": [
+            {
+              "name": "User",
+              "type": "has_many",
+              "foreignKey": "roleId"
+            }
+          ]
         }
-      ]
+      }
     },
     {
       "name": "task",
@@ -23,23 +35,13 @@
       "host": "localhost",
       "username": "place your database username here",
       "password": "place your database password here",
-      "objects": [
-        {
-          "name": "task"
-        },
-        {
-          "name": "assignment"
-        },
-        {
-          "name": "taskStatus"
-        },
-        {
-          "name": "taskSize"
-        },
-        {
-          "name": "taskPriority"
-        }
-      ]
+      "objects": {
+        "Task": { "tableName": "role" },
+        "Assignment": { "tableName": "role" },
+        "TaskStatus": { "tableName": "role" },
+        "TaskSize": { "tableName": "role" },
+        "TaskPriority": { "tableName": "role" }
+      }
     }
   ]
 }
