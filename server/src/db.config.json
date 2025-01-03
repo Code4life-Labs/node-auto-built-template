@@ -1,0 +1,51 @@
+{
+  "databases": [
+    {
+      "name": "identity",
+      "database": "TaskManagerIdentity",
+      "engine": "mysql",
+      "host": "identity.database",
+      "username": "root",
+      "password": "letmein12345",
+      "objects": {
+        "User": {
+          "tableName": "User",
+          "associations": [
+            {
+              "object": "Role",
+              "name": "role",
+              "type": "belong",
+              "foreignKey": "roleId"
+            }
+          ]
+        },
+        "Role": {
+          "tableName": "Role",
+          "associations": [
+            {
+              "object": "User",
+              "name": "user",
+              "type": "has_many",
+              "foreignKey": "roleId"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "task",
+      "database": "TaskManager",
+      "engine": "mongodb",
+      "host": "task.database",
+      "username": "root",
+      "password": "letmein12345",
+      "objects": {
+        "Task": { "collectionName": "Task" },
+        "Assignment": { "collectionName": "Assigment" },
+        "TaskStatus": { "collectionName": "TaskStatus" },
+        "TaskSize": { "collectionName": "TaskSize" },
+        "TaskPriority": { "collectionName": "TaskPriority" }
+      }
+    }
+  ]
+}
