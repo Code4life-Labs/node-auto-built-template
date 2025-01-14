@@ -41,28 +41,31 @@ export type TaskManagerModelsType = {
   TaskSize: Model<any>;
 };
 
+const _models = {};
+
 export default async function () {
-  const models = {};
   const connectionString = `mongodb://${databaseUsername}:${databasePassword}@${databaseHost}:27017/${databaseName}`;
 
   await mongoose.connect(connectionString, {
     authSource: "admin",
   });
 
-  const modelFilePaths = reader.getAllPathsToFilesSync(rootPath);
+  if (Object.keys(_models).length === 0) {
+    const modelFilePaths = reader.getAllPathsToFilesSync(rootPath);
 
-  for (const modelFilePath of modelFilePaths) {
-    const modelDefault = require(modelFilePath);
+    for (const modelFilePath of modelFilePaths) {
+      const modelDefault = require(modelFilePath);
 
-    if (!modelDefault.default)
-      throw new Error("Model should be exported as default.");
+      if (!modelDefault.default)
+        throw new Error("Model should be exported as default.");
 
-    const model = modelDefault.default;
+      const model = modelDefault.default;
 
-    // Init
-    const result = model();
-    (models as any)[result.name] = result.model;
+      // Init
+      const result = model();
+      (_models as any)[result.name] = result.model;
+    }
   }
 
-  return models as TaskManagerModelsType;
+  return _models as TaskManagerModelsType;
 }

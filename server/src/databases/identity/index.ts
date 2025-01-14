@@ -43,9 +43,9 @@ export type IdentityModelsType = {
   Role: ModelStatic<Model>;
 };
 
-export default function () {
-  const models = {};
+const _models = {};
 
+export default function () {
   const sequelize = new Sequelize(
     databaseName!,
     databaseUsername!,
@@ -55,31 +55,34 @@ export default function () {
       dialect: databaseEngine as Dialect,
     }
   );
-  const modelFilePaths = reader.getAllPathsToFilesSync(rootPath);
 
-  for (const modelFilePath of modelFilePaths) {
-    const modelDefault = require(modelFilePath);
+  if (Object.keys(_models).length === 0) {
+    const modelFilePaths = reader.getAllPathsToFilesSync(rootPath);
 
-    if (!modelDefault.default)
-      throw new Error("Model should be exported as default.");
+    for (const modelFilePath of modelFilePaths) {
+      const modelDefault = require(modelFilePath);
 
-    const model = modelDefault.default;
+      if (!modelDefault.default)
+        throw new Error("Model should be exported as default.");
 
-    // Init
-    const result = model(sequelize, DataTypes);
-    (models as any)[result.name] = result;
-  }
+      const model = modelDefault.default;
 
-  // Use another for loop to check associations
-  // Note: `associations` config only exists in SQL
-  for (const key in models) {
-    if (
-      (models as any)[key].associate &&
-      typeof (models as any)[key].associate === "function"
-    ) {
-      (models as any)[key].associate(models, database.objects);
+      // Init
+      const result = model(sequelize, DataTypes);
+      (_models as any)[result.name] = result;
+    }
+
+    // Use another for loop to check associations
+    // Note: `associations` config only exists in SQL
+    for (const key in _models) {
+      if (
+        (_models as any)[key].associate &&
+        typeof (_models as any)[key].associate === "function"
+      ) {
+        (_models as any)[key].associate(_models, database.objects);
+      }
     }
   }
 
-  return models as IdentityModelsType;
+  return _models as IdentityModelsType;
 }

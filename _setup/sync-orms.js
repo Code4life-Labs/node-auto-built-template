@@ -59,6 +59,7 @@ console.log("Generating from your `databases` configuration...");
 const sequelizeSetupTemplateName = "sequelize-setup.template";
 const sequelizeModelTemplateName = "sequelize-model.template";
 const mongooseSetupTemplateName = "mongoose-setup.template";
+const mongooseSchemaTemplateName = "mongoose-schema.template";
 const placeHolders = {
   databaseName: "[DATABASE_NAME]",
   databaseConfigurationIndex: "[INDEX]",
@@ -79,6 +80,9 @@ const sequelizeModelTemplate = fs
 const mongooseSetupTemplate = fs
   .readFileSync(path.resolve(templatePath, mongooseSetupTemplateName))
   .toString();
+const mongooseSchemaTemplate = fs
+  .readFileSync(path.resolve(templatePath, mongooseSchemaTemplateName))
+  .toString();
 
 let index = 0;
 for (const config of databaseConfigurations) {
@@ -92,7 +96,7 @@ for (const config of databaseConfigurations) {
     case "sequelize": {
       // Replace value in sequelize-setup template
       let template = sequelizeSetupTemplate
-        .replaceAll(placeHolders.databaseName, config.name)
+        .replaceAll(placeHolders.databaseName, config.database)
         .replaceAll(placeHolders.databaseConfigurationIndex, index);
       let targetDatabaseDirPath = path.resolve(targetDirPath, config.name);
 
@@ -146,16 +150,51 @@ for (const config of databaseConfigurations) {
      */
     case "mongoose": {
       // Replace value in mongoose-setup template
-
-      // Iterate the objects property
+      let template = mongooseSetupTemplate
+        .replaceAll(placeHolders.databaseName, config.database)
+        .replaceAll(placeHolders.databaseConfigurationIndex, index);
+      let targetDatabaseDirPath = path.resolve(targetDirPath, config.name);
 
       // Check if folder of database exists
+      if (!fs.existsSync(targetDatabaseDirPath)) {
+        // Create folder
+        fs.mkdirSync(targetDatabaseDirPath);
 
-      // Create folder
+        // Create index file
+        fs.writeFileSync(
+          path.resolve(targetDatabaseDirPath, "index.ts"),
+          template
+        );
+      }
 
-      // Check if folder and file of model exist
+      // Iterate the objects property
+      for (const key in config.objects) {
+        let modelFolderPath = path.resolve(
+          targetDatabaseDirPath,
+          config.objects[key].collectionName
+        );
+        let modelFilePath = path.resolve(modelFolderPath, "model.ts");
+        let modelTemplate = mongooseSchemaTemplate
+          .replaceAll(placeHolders.modelName, key)
+          .replaceAll(
+            placeHolders.collectionName,
+            config.objects[key].collectionName
+          );
 
-      // Create folder and file for model
+        // Check if folder of model exist
+        if (!fs.existsSync(modelFolderPath)) {
+          // Create new
+          fs.mkdirSync(modelFolderPath);
+        }
+
+        // Check if file of model exist
+        if (!fs.existsSync(modelFilePath)) {
+          // Create new
+          fs.writeFileSync(modelFilePath, modelTemplate);
+        } else {
+          // Update
+        }
+      }
       break;
     }
 

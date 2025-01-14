@@ -1,0 +1,43 @@
+import mongoose, { Schema } from "mongoose";
+
+let _schema: Schema;
+
+export default function () {
+  if (!_schema) {
+    _schema = new Schema(
+      {
+        refId: Schema.Types.ObjectId,
+        createdAt: {
+          type: Schema.Types.Number,
+          default: Date.now(),
+        },
+        updatedAt: {
+          type: Schema.Types.Number,
+          default: Date.now(),
+        },
+      },
+      {
+        collection: "[COLLECTION_NAME]",
+        toJSON: {
+          virtuals: true,
+          transform: function (doc, ret) {
+            // Detele some fields
+            delete ret.refId;
+            delete ret.id;
+
+            return ret;
+          },
+        },
+      }
+    );
+
+    _schema.virtual("ref", {
+      ref: "Example",
+      localField: "_id",
+      foreignField: "refId",
+      justOne: true,
+    });
+  }
+  const [MODEL_NAME]Model = mongoose.model("[MODEL_NAME]", _schema);
+  return { model: [MODEL_NAME]Model, name: "[MODEL_NAME]" };
+}

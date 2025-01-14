@@ -122,7 +122,7 @@ module.exports = {
       result[result.length - 1].value = arg;
     }
 
-    if (args[0] !== "--help" && args[0] !== "-" && result.length === 0) {
+    if (args[0] !== "--help" && args[0] !== "-h" && result.length === 0) {
       console.table(supportedArgs);
       throw new Error(
         "Information of endpoint is required, see more in the table below"
