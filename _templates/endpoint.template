@@ -1,10 +1,31 @@
 // Import classes
 import { Endpoints } from "src/classes/Endpoints";
 
+// Import logger builder
+import { LoggerBuilder } from "src/logger";
+
 const [ROOT_ENDPOINT_NAME]Endpoints = new Endpoints("[ROOT_ENDPOINT_NAME]");
+const logger = new LoggerBuilder().to("[ROOT_ENDPOINT_NAME]-endpoints").build();
 
 // Add your handlers here
 [ROOT_ENDPOINT_NAME]Endpoints.createHandler("").get((req, res) => {
+  const profiler = logger.startTimer();
+  // Start log
+  profiler.logger.info(
+    LoggerBuilder.buildEndpointLog("Hello from [ROOT_ENDPOINT_NAME] root endpoint", req)
+  );
+
+
+  for (let i = 0; i < 5e5; i++) {}
+
+  // Done
+  profiler.done(
+    LoggerBuilder.buildEndpointLog(
+      "High-five successfully",
+      req
+    )
+  );
+
   return "Hello from [ROOT_ENDPOINT_NAME] root endpoint";
 });
 
